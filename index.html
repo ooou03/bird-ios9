@@ -20,6 +20,8 @@
 
         body.phase-outbound { background-color: #e8f0fe; }
         body.phase-return { background-color: #e6f4ea; }
+        /* PDF 模式強制白底 */
+        body.pdf-mode { background-color: #ffffff; padding: 0; margin: 0; }
         
         .main-title { color: #202124; text-align: center; margin: 10px 0 5px 0; font-size: 22px; font-weight: 800; }
         .sub-title { color: #5f6368; text-align: center; margin: 0 0 20px 0; font-size: 16px; font-weight: bold; }
@@ -50,20 +52,20 @@
         .quick-btn { padding: 10px 14px; background: #fff; color: #202124; border: 1px solid #ccc; border-radius: 20px; font-size: 15px; cursor: pointer; margin-right: 8px; margin-bottom: 8px; }
 
         .bird-list { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; padding-bottom: 20px; }
-        /* 修改鳥類卡片，讓它支援換行顯示備註 */
         .bird-item { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; background: white; padding: 15px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* 鳥類名稱與數量那一排 */
         .bird-main-row { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; align-items: center; width: 100%; }
-        .bird-info { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-        .bird-name { font-size: 20px; font-weight: 600; color: #202124; display: block; }
-        .bird-note-display { font-size: 14px; color: #1a73e8; margin-top: 5px; display: block; word-break: break-all; }
+        .bird-name { font-size: 20px; font-weight: 600; color: #202124; }
         .controls { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; }
-        .btn-circle { width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 24px; color: white; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 0 5px; }
+        .btn-circle { width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 24px; color: white; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 0 10px; }
         .btn-minus { background: #ea4335; }
         .btn-plus { background: #34a853; }
-        /* 新增備註按鈕樣式 */
-        .btn-note { background: #f9ab00; width: 36px; height: 36px; font-size: 16px; margin-left: 5px; }
+        .count-display { font-size: 24px; font-weight: bold; min-width: 50px; text-align: center; color: #202124; cursor: pointer; background: #fff; padding: 5px 10px; border-radius: 8px; border: 2px dashed #ccc; }
         
-        .count-display { font-size: 24px; font-weight: bold; min-width: 45px; text-align: center; color: #202124; cursor: pointer; background: #fff; padding: 5px 5px; border-radius: 8px; border: 2px dashed #ccc; margin: 0 5px;}
+        /* 直接顯示在下方的備註輸入框 */
+        .inline-note-input { width: 100%; padding: 10px; margin-top: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #fafafa; outline: none; }
+        .inline-note-input:focus { border-color: #1a73e8; background: #fff; }
 
         .footer-btns { margin-top: 10px; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; padding-bottom: 30px; }
         .btn-action { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 18px; font-weight: bold; color: white; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
@@ -76,7 +78,7 @@
         #summary-section, #settings-section { display: none; }
         .table-wrapper { background: white; border-radius: 12px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; padding: 15px; }
         table { width: 100%; min-width: 500px; border-collapse: collapse; }
-        th, td { padding: 10px; text-align: center; border: 1px solid #ddd; font-size: 15px; }
+        th, td { padding: 10px; text-align: center; border: 1px solid #000; font-size: 15px; }
         th { background: #f8f9fa; color: #5f6368; font-weight: 600; }
         .total-col { font-weight: bold; color: #1a73e8; }
 
@@ -92,27 +94,19 @@
         #sig-canvas { border: 2px solid #ccc; border-radius: 8px; background: #fff; width: 100%; height: 250px; cursor: crosshair; }
         .sig-preview { border: 1px solid #ddd; border-radius: 4px; display: none; margin-top: 10px; background: white; max-width: 100%; }
 
-        /* 列印專用 CSS：確保產生的 PDF 乾淨漂亮 */
-        @media print {
-            body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; color-adjust: exact; }
-            .footer-btns, .tabs, .meta-toggle, #record-section, #settings-section { display: none !important; }
-            #summary-section { display: block !important; }
-            .table-wrapper { box-shadow: none; border-radius: 0; padding: 0; overflow: visible; }
-            table { width: 100% !important; min-width: 100% !important; border-collapse: collapse; page-break-inside: auto; }
-            tr { page-break-inside: avoid; page-break-after: auto; }
-            th, td { padding: 8px !important; border: 1px solid #000 !important; font-size: 12pt !important; color: black !important; }
-            th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
-            h2 { display: none; } /* 隱藏原本的統計標題，用表格內的表頭取代 */
-            h3 { font-size: 16pt; margin: 0 0 5px 0; }
-            p { font-size: 12pt; margin: 0; }
-        }
+        /* PDF 模式的專屬樣式設定 */
+        .pdf-instruction-banner { display: none; background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; border: 2px dashed #ffeeba; font-size: 16px; line-height: 1.5; }
+        body.pdf-mode .pdf-instruction-banner { display: block; }
+        body.pdf-mode .pdf-hide { display: none !important; }
+        body.pdf-mode .table-wrapper { box-shadow: none; padding: 0; overflow: visible; }
     </style>
 </head>
 <body class="phase-outbound">
 
 <script>
+    // 防呆報錯機制，若真有錯誤會跳窗提醒
     window.onerror = function(msg, url, line) {
-        alert("iPad 錯誤回報：\n" + msg + "\n行號: " + line + "\n請截圖給工程師。");
+        alert("iPad 錯誤回報：\n" + msg + "\n行號: " + line);
         return false;
     };
 </script>
@@ -207,7 +201,7 @@
         <div style="display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; align-items: center;">
             <span class="quick-label">⚡ 快速預選名單：</span>
             <div>
-                <button onclick="preSelectAll()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">📥 全選</button>
+                <button onclick="preSelectAll()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">📥 全選加入清單</button>
                 <button onclick="showSettings()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">⚙️ 編輯</button>
             </div>
         </div>
@@ -223,8 +217,16 @@
 </div>
 
 <div id="summary-section">
-    <!-- 列印時這個 H2 會被隱藏 -->
-    <h2>📊 調查統計結果</h2>
+    <!-- PDF 存檔模式教學橫幅 (只在 PDF 模式下顯示) -->
+    <div class="pdf-instruction-banner">
+        👉 <b>【第一步】</b> 請點擊上方網址列旁邊的「分享 ⬆️」圖示<br>
+        👉 <b>【第二步】</b> 在選單中找到並點選「儲存 PDF 到 iBooks」<br>
+        <i>(存檔完成後，請點下方按鈕返回)</i><br>
+        <button onclick="exitPDFMode()" style="margin-top: 15px; padding: 10px 20px; background: #ea4335; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">❌ 結束並離開 PDF 模式</button>
+    </div>
+
+    <h2 class="pdf-hide">📊 調查統計結果</h2>
+    
     <div class="table-wrapper" id="export-container">
         <div style="text-align: center; margin-bottom: 15px;">
             <h3 style="margin: 0 0 5px 0; font-size: 18px;">淡水河流域沿岸濕地鳥類同步調查記錄表</h3>
@@ -232,39 +234,49 @@
         </div>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; background: #fdfdfd;">
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold; width: 16%;">調查日期</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left;" colspan="5" id="export-date"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold; width: 16%;">調查日期</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left;" colspan="5" id="export-date"></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold;">天氣</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left;" colspan="5" id="export-weather"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold;">天氣</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left;" colspan="5" id="export-weather"></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold;">去程時間</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left;" colspan="2" id="export-out-time"></td>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold;">回程時間</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left;" colspan="2" id="export-ret-time"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold;">去程時間</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left;" colspan="2" id="export-out-time"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold;">回程時間</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left;" colspan="2" id="export-ret-time"></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold; vertical-align: middle;">領隊</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left; vertical-align: middle;" colspan="2" id="export-leader"></td>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold; vertical-align: middle;">聯絡電話</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left; vertical-align: middle;" colspan="2" id="export-phone"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold; vertical-align: middle;">領隊</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left; vertical-align: middle;" colspan="2" id="export-leader"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold; vertical-align: middle;">聯絡電話</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left; vertical-align: middle;" colspan="2" id="export-phone"></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold;">E-mail</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left;" colspan="5" id="export-email"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold;">E-mail</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left;" colspan="5" id="export-email"></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; font-weight: bold; vertical-align: top;">隊員</td>
-                <td style="border: 1px solid #aaa; padding: 8px; text-align: left; height: 120px; vertical-align: top; white-space: pre-wrap;" colspan="5" id="export-members"></td>
+                <td style="border: 1px solid #000; padding: 8px; background: #eee; font-weight: bold; vertical-align: top;">隊員</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: left; height: 120px; vertical-align: top; white-space: pre-wrap;" colspan="5" id="export-members"></td>
             </tr>
         </table>
         <div id="table-container"></div>
     </div>
-    <div class="footer-btns">
-        <button class="btn-action btn-copy" onclick="printTable()">🖨️ 產生 PDF / 列印</button>
+    
+    <div class="footer-btns pdf-hide">
+        <!-- 取代原本會當機的列印按鈕，改用 PDF 轉換模式 -->
+        <button class="btn-action btn-copy" onclick="enterPDFMode()">📄 轉換為純淨 PDF 模式 (iOS 9 專用)</button>
+        <!-- 加入極致防呆的純文字匯出功能 -->
+        <button class="btn-action" style="background: #34a853;" onclick="showRawText()">📧 產生純文字報表 (複製用)</button>
         <button class="btn-action btn-back" onclick="hideSummary()">⬅️ 返回繼續紀錄</button>
+    </div>
+
+    <!-- 純文字報表區塊 -->
+    <div id="raw-text-area" class="pdf-hide" style="display:none; margin-top: 20px;">
+        <p style="font-weight: bold; color: #ea4335;">請長按下方文字框，選擇「全選」並「拷貝」</p>
+        <textarea id="raw-text-output" rows="15" style="width: 100%; padding: 10px; font-size: 14px; border: 2px solid #ccc; border-radius: 8px;"></textarea>
     </div>
 </div>
 
@@ -278,7 +290,6 @@
     </div>
 </div>
 
-<!-- 提示框 -->
 <div id="custom-modal" class="modal-overlay">
     <div class="modal-content">
         <div id="modal-text" class="modal-text">提示訊息</div>
@@ -289,7 +300,6 @@
     </div>
 </div>
 
-<!-- 快速輸入數量 -->
 <div id="prompt-modal" class="modal-overlay">
     <div class="modal-content">
         <div id="prompt-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;"></div>
@@ -302,19 +312,6 @@
     </div>
 </div>
 
-<!-- 新增：單隻鳥類備註對話框 -->
-<div id="note-modal" class="modal-overlay">
-    <div class="modal-content">
-        <div id="note-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;"></div>
-        <textarea id="note-input" rows="4" placeholder="輸入特殊紀錄，例如：帶幼鳥、有腳環..." style="width: 100%; padding: 15px; font-size: 16px; border: 2px solid #1a73e8; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; outline:none; resize:vertical;"></textarea>
-        <div class="modal-buttons">
-            <button class="modal-btn modal-btn-cancel" onclick="closeNote()">取消</button>
-            <button class="modal-btn" style="background: #1a73e8; color: white;" onclick="applyNote()">💾 儲存備註</button>
-        </div>
-    </div>
-</div>
-
-<!-- 數位簽名板 Modal -->
 <div id="signature-modal" class="modal-overlay">
     <div class="modal-content" style="max-width: 600px; width: 95%;">
         <div id="sig-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;">✍️ 簽名板</div>
@@ -332,9 +329,7 @@
         '一':1, '二':2, '十':2, '丁':2, '七':2, '九':2, '八':2,
         '小':3, '大':3, '三':3, '千':3, '山':3, '川':3, '土':3, 
         '中':4, '水':4, '火':4, '天':4, '五':4, '六':4, '方':4,
-        '白':5, 
-        '灰':6, '朱':6, '竹':6, '色':6,
-        '赤':7, '花':7, '尾':7,
+        '白':5, '灰':6, '朱':6, '竹':6, '色':6, '赤':7, '花':7, '尾':7,
         '夜':8, '東':8, '金':8, '青':8, '長':8, '林':8, '卷':8, '枕':8, '雨':8,
         '紅':9, '洋':9, '冠':9, '背':9, '面':9,
         '埃':10, '家':10, '粉':10, '珠':10, '高':10, '胸':10, '草':10, '紋':10,
@@ -342,15 +337,10 @@
         '喜':12, '斯':12, '斑':12, '棕':12, '絲':12, '黃':12, '黑':12, '雁':12, '短':12, '森':12, '紫':12, '喉':12,
         '極':13, '蒼':13, '頸':13, '腹':13, '嘴':13, '腳':13, '鳩':13, '鴿':13, '腰':13,
         '遠':14, '褐':14, '翠':14, '鳳':14, '綠':14, '銀':14, '鴴':14, '領':14,
-        '趾':15, 
-        '樹':16, '頭':16, '鴨':16, '燕':16,
-        '磯':17, '翼':17, '環':17,
-        '藍':18, '鵝':18,
-        '鵲':19, '鵯':19, 
-        '鶯':21, '鶲':21, '鶇':21, '鶺':21,
-        '鷗':22, '彎':22,
-        '鷸':23, 
-        '鷺':24, '鷹':24
+        '趾':15, '樹':16, '頭':16, '鴨':16, '燕':16,
+        '磯':17, '翼':17, '環':17, '藍':18, '鵝':18,
+        '鵲':19, '鵯':19, '鶯':21, '鶲':21, '鶇':21, '鶺':21,
+        '鷗':22, '彎':22, '鷸':23, '鷺':24, '鷹':24
     };
 
     function getStroke(char) {
@@ -360,31 +350,18 @@
 
     function sortBirds(arr) {
         arr.sort(function(a, b) {
-            if (!a) return 1;
-            if (!b) return -1;
-            var charA1 = a.charAt(0);
-            var charB1 = b.charAt(0);
-            var strokeA1 = getStroke(charA1);
-            var strokeB1 = getStroke(charB1);
-            
-            if (strokeA1 !== strokeB1) {
-                return strokeA1 - strokeB1; 
-            } else {
-                var charA2 = a.charAt(1) || '';
-                var charB2 = b.charAt(1) || '';
-                var strokeA2 = getStroke(charA2);
-                var strokeB2 = getStroke(charB2);
-                if (strokeA2 !== strokeB2) {
-                    return strokeA2 - strokeB2; 
-                } else {
-                    return a.localeCompare(b); 
-                }
-            }
+            if (!a) return 1; if (!b) return -1;
+            var charA1 = a.charAt(0), charB1 = b.charAt(0);
+            var strokeA1 = getStroke(charA1), strokeB1 = getStroke(charB1);
+            if (strokeA1 !== strokeB1) return strokeA1 - strokeB1; 
+            var charA2 = a.charAt(1) || '', charB2 = b.charAt(1) || '';
+            var strokeA2 = getStroke(charA2), strokeB2 = getStroke(charB2);
+            if (strokeA2 !== strokeB2) return strokeA2 - strokeB2; 
+            return a.localeCompare(b); 
         });
     }
 
     var currentPhase = 'outbound';
-    // 在資料結構中加入 notes，用來存每種鳥的備註
     var data = {
         meta: { date: '', weather: '', outboundStart: '', outboundEnd: '', returnStart: '', returnEnd: '', leader: '', phone: '', email: '', members: '', leaderSignature: '', membersSignature: '' },
         birdSpecies: [],
@@ -404,7 +381,7 @@
     ];
     
     var commonBirds = [];
-    var STORAGE_KEY = 'offlineBirdSurveyData_v10_ios9'; // 更新版本確保升級
+    var STORAGE_KEY = 'offlineBirdSurveyData_v11_ios9'; 
     var LIST_STORAGE_KEY = 'customBirdList_ios9_v4'; 
     var editingBird = null;
 
@@ -425,7 +402,7 @@
                 data.meta.members = data.meta.members || '';
                 data.meta.leaderSignature = data.meta.leaderSignature || '';
                 data.meta.membersSignature = data.meta.membersSignature || '';
-                if(!data.notes) data.notes = {}; // 確保舊版有備註欄位
+                if(!data.notes) data.notes = {}; 
             } catch (e) { }
         }
 
@@ -686,7 +663,7 @@
                 if (index > -1) data.birdSpecies.splice(index, 1); 
                 delete data.records.outbound[bird];
                 delete data.records.return[bird];
-                if (data.notes && data.notes[bird]) delete data.notes[bird]; // 同時刪除備註
+                if (data.notes && data.notes[bird]) delete data.notes[bird]; 
             }
             saveData(); 
             renderBirdList();
@@ -694,34 +671,14 @@
         }
     }
 
-    // --- 備註功能邏輯 ---
-    function openNote(bird) {
-        editingBird = bird;
-        document.getElementById('note-title').innerText = '📝 ' + bird + ' 備註';
-        var inputElement = document.getElementById('note-input');
-        inputElement.value = data.notes[bird] || ''; 
-        var modal = document.getElementById('note-modal');
-        modal.style.display = '-webkit-flex';
-        modal.style.display = 'flex';
-        setTimeout(function() { inputElement.focus(); }, 100);
-    }
-
-    function closeNote() {
-        document.getElementById('note-modal').style.display = 'none';
-        editingBird = null;
-    }
-
-    function applyNote() {
-        if (!editingBird) return;
-        var noteText = document.getElementById('note-input').value.trim();
-        if (noteText) {
-            data.notes[editingBird] = noteText;
+    // --- 全新：直接在畫面上儲存備註 ---
+    function updateNote(bird, value) {
+        if(value.replace(/^\s+|\s+$/g, '') !== '') {
+            data.notes[bird] = value;
         } else {
-            delete data.notes[editingBird];
+            delete data.notes[bird];
         }
         saveData();
-        renderBirdList();
-        closeNote();
     }
 
     function renderBirdList() {
@@ -734,22 +691,20 @@
         for (var i = 0; i < data.birdSpecies.length; i++) {
             var bird = data.birdSpecies[i];
             var count = data.records[currentPhase][bird];
-            var note = data.notes[bird] ? '<span class="bird-note-display">📝 備註：' + data.notes[bird] + '</span>' : '';
+            var noteVal = data.notes[bird] || '';
+            
             var div = document.createElement('div');
             div.className = 'bird-item';
             div.innerHTML = 
                 '<div class="bird-main-row">' +
-                    '<div class="bird-info">' +
-                        '<span class="bird-name">' + bird + '</span>' +
-                        note +
-                    '</div>' +
+                    '<span class="bird-name">' + bird + '</span>' +
                     '<div class="controls">' +
                         '<button class="btn-circle btn-minus" onclick="changeCount(\'' + bird + '\', -1)">-</button>' +
                         '<div class="count-display" onclick="openEditCount(\'' + bird + '\')">' + count + '</div>' +
                         '<button class="btn-circle btn-plus" onclick="changeCount(\'' + bird + '\', 1)">+</button>' +
-                        '<button class="btn-circle btn-note" onclick="openNote(\'' + bird + '\')">📝</button>' +
                     '</div>' +
-                '</div>';
+                '</div>' +
+                '<input type="text" class="inline-note-input" placeholder="✏️ 輸入備註 (帶幼鳥、有腳環...)" value="' + noteVal + '" onchange="updateNote(\'' + bird + '\', this.value)">';
             container.appendChild(div);
         }
     }
@@ -802,6 +757,7 @@
     function showSummary() {
         document.getElementById('record-section').style.display = 'none';
         document.getElementById('summary-section').style.display = 'block';
+        document.getElementById('raw-text-area').style.display = 'none'; // 隱藏文字框
         document.body.style.backgroundColor = "#f0f2f5";
         window.scrollTo(0, 0);
         
@@ -851,7 +807,7 @@
             var bird = sortedBirds[i];
             var outC = data.records.outbound[bird] || 0;
             var retC = data.records.return[bird] || 0;
-            var note = data.notes[bird] || ''; // 讀取備註
+            var note = data.notes[bird] || ''; 
             var total = outC + retC;
             if (total > 0) {
                 totalOut += outC; totalRet += retC; grandTotal += total;
@@ -861,7 +817,7 @@
                     '<td style="border: 1px solid #000; padding: 8px; text-align: center;">' + outC + '</td>' +
                     '<td style="border: 1px solid #000; padding: 8px; text-align: center;">' + retC + '</td>' +
                     '<td style="border: 1px solid #000; padding: 8px; text-align: center;" class="total-col">' + total + '</td>' +
-                    '<td style="border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; color: #555;">' + note + '</td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: left; font-size: 14px; color: #555;">' + note + '</td>' +
                     '</tr>';
             }
         }
@@ -887,9 +843,53 @@
         window.scrollTo(0, 0);
     }
 
-    // 呼叫系統列印功能 (iPad 存 PDF 密技)
-    function printTable() {
-        window.print();
+    // --- 全新解決方案一：進入純淨 PDF 模式 ---
+    function enterPDFMode() {
+        document.body.className = 'pdf-mode';
+        window.scrollTo(0, 0);
+    }
+
+    function exitPDFMode() {
+        document.body.className = ''; 
+        setPhase(currentPhase); 
+    }
+
+    // --- 全新解決方案二：純文字報表匯出 ---
+    function showRawText() {
+        var txt = "【淡水河流域沿岸濕地鳥類同步調查記錄表 - 竹圍】\n\n";
+        var weekStr = document.getElementById('meta-weekday').innerText;
+        txt += "調查日期：" + (data.meta.date ? data.meta.date + " (" + weekStr + ")" : "未填寫") + "\n";
+        txt += "天氣：" + (data.meta.weather || "未填寫") + "\n";
+        txt += "去程時間：" + (data.meta.outboundStart || "--:--") + " ~ " + (data.meta.outboundEnd || "--:--") + "\n";
+        txt += "回程時間：" + (data.meta.returnStart || "--:--") + " ~ " + (data.meta.returnEnd || "--:--") + "\n";
+        txt += "領隊：" + (data.meta.leader || "未填寫") + " (電話:" + (data.meta.phone||"無") + " / Email:" + (data.meta.email||"無") + ")\n";
+        txt += "隊員：" + (data.meta.members ? data.meta.members.replace(/\n/g, ", ") : "未填寫") + "\n\n";
+        
+        txt += "--------------------------------------\n";
+        txt += "序號 | 鳥名 | 去程 | 回程 | 總計 | 備註\n";
+        txt += "--------------------------------------\n";
+        
+        var totalOut = 0, totalRet = 0, grandTotal = 0, serialNumber = 1;
+        var sortedBirds = data.birdSpecies.slice();
+        sortBirds(sortedBirds);
+
+        for (var i = 0; i < sortedBirds.length; i++) {
+            var bird = sortedBirds[i];
+            var outC = data.records.outbound[bird] || 0;
+            var retC = data.records.return[bird] || 0;
+            var note = data.notes[bird] || ''; 
+            var total = outC + retC;
+            if (total > 0) {
+                totalOut += outC; totalRet += retC; grandTotal += total;
+                txt += (serialNumber++) + " | " + bird + " | " + outC + " | " + retC + " | " + total + " | " + note + "\n";
+            }
+        }
+        txt += "--------------------------------------\n";
+        txt += "總計 | " + totalOut + " | " + totalRet + " | " + grandTotal + "\n";
+
+        document.getElementById('raw-text-output').value = txt;
+        document.getElementById('raw-text-area').style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
     function showSettings() {
