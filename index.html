@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -51,15 +50,20 @@
         .quick-btn { padding: 10px 14px; background: #fff; color: #202124; border: 1px solid #ccc; border-radius: 20px; font-size: 15px; cursor: pointer; margin-right: 8px; margin-bottom: 8px; }
 
         .bird-list { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; padding-bottom: 20px; }
-        .bird-item { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; align-items: center; background: white; padding: 15px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* 修改鳥類卡片，讓它支援換行顯示備註 */
+        .bird-item { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; background: white; padding: 15px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .bird-main-row { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; align-items: center; width: 100%; }
         .bird-info { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
         .bird-name { font-size: 20px; font-weight: 600; color: #202124; display: block; }
+        .bird-note-display { font-size: 14px; color: #1a73e8; margin-top: 5px; display: block; word-break: break-all; }
         .controls { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; }
-        .btn-circle { width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 24px; color: white; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 0 10px; }
+        .btn-circle { width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 24px; color: white; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 0 5px; }
         .btn-minus { background: #ea4335; }
         .btn-plus { background: #34a853; }
+        /* 新增備註按鈕樣式 */
+        .btn-note { background: #f9ab00; width: 36px; height: 36px; font-size: 16px; margin-left: 5px; }
         
-        .count-display { font-size: 24px; font-weight: bold; min-width: 50px; text-align: center; color: #202124; cursor: pointer; background: #fff; padding: 5px 10px; border-radius: 8px; border: 2px dashed #ccc; }
+        .count-display { font-size: 24px; font-weight: bold; min-width: 45px; text-align: center; color: #202124; cursor: pointer; background: #fff; padding: 5px 5px; border-radius: 8px; border: 2px dashed #ccc; margin: 0 5px;}
 
         .footer-btns { margin-top: 10px; display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; flex-direction: column; padding-bottom: 30px; }
         .btn-action { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 18px; font-weight: bold; color: white; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
@@ -87,9 +91,31 @@
         
         #sig-canvas { border: 2px solid #ccc; border-radius: 8px; background: #fff; width: 100%; height: 250px; cursor: crosshair; }
         .sig-preview { border: 1px solid #ddd; border-radius: 4px; display: none; margin-top: 10px; background: white; max-width: 100%; }
+
+        /* 列印專用 CSS：確保產生的 PDF 乾淨漂亮 */
+        @media print {
+            body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; color-adjust: exact; }
+            .footer-btns, .tabs, .meta-toggle, #record-section, #settings-section { display: none !important; }
+            #summary-section { display: block !important; }
+            .table-wrapper { box-shadow: none; border-radius: 0; padding: 0; overflow: visible; }
+            table { width: 100% !important; min-width: 100% !important; border-collapse: collapse; page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            th, td { padding: 8px !important; border: 1px solid #000 !important; font-size: 12pt !important; color: black !important; }
+            th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
+            h2 { display: none; } /* 隱藏原本的統計標題，用表格內的表頭取代 */
+            h3 { font-size: 16pt; margin: 0 0 5px 0; }
+            p { font-size: 12pt; margin: 0; }
+        }
     </style>
 </head>
 <body class="phase-outbound">
+
+<script>
+    window.onerror = function(msg, url, line) {
+        alert("iPad 錯誤回報：\n" + msg + "\n行號: " + line + "\n請截圖給工程師。");
+        return false;
+    };
+</script>
 
 <div id="record-section">
     <h2 class="main-title">淡水河流域沿岸濕地鳥類同步調查記錄表</h2>
@@ -181,7 +207,7 @@
         <div style="display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; -webkit-box-align: center; -webkit-align-items: center; align-items: center;">
             <span class="quick-label">⚡ 快速預選名單：</span>
             <div>
-                <button onclick="preSelectAll()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">📥 全選加入清單</button>
+                <button onclick="preSelectAll()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">📥 全選</button>
                 <button onclick="showSettings()" style="background:none; border:none; color:#3c4043; font-size:15px; font-weight:bold; cursor:pointer; padding:5px;">⚙️ 編輯</button>
             </div>
         </div>
@@ -197,6 +223,7 @@
 </div>
 
 <div id="summary-section">
+    <!-- 列印時這個 H2 會被隱藏 -->
     <h2>📊 調查統計結果</h2>
     <div class="table-wrapper" id="export-container">
         <div style="text-align: center; margin-bottom: 15px;">
@@ -236,7 +263,7 @@
         <div id="table-container"></div>
     </div>
     <div class="footer-btns">
-        <button class="btn-action btn-copy" onclick="copyTable()">📋 複製所有資料</button>
+        <button class="btn-action btn-copy" onclick="printTable()">🖨️ 產生 PDF / 列印</button>
         <button class="btn-action btn-back" onclick="hideSummary()">⬅️ 返回繼續紀錄</button>
     </div>
 </div>
@@ -251,6 +278,7 @@
     </div>
 </div>
 
+<!-- 提示框 -->
 <div id="custom-modal" class="modal-overlay">
     <div class="modal-content">
         <div id="modal-text" class="modal-text">提示訊息</div>
@@ -261,6 +289,7 @@
     </div>
 </div>
 
+<!-- 快速輸入數量 -->
 <div id="prompt-modal" class="modal-overlay">
     <div class="modal-content">
         <div id="prompt-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;"></div>
@@ -273,6 +302,19 @@
     </div>
 </div>
 
+<!-- 新增：單隻鳥類備註對話框 -->
+<div id="note-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div id="note-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;"></div>
+        <textarea id="note-input" rows="4" placeholder="輸入特殊紀錄，例如：帶幼鳥、有腳環..." style="width: 100%; padding: 15px; font-size: 16px; border: 2px solid #1a73e8; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; outline:none; resize:vertical;"></textarea>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="closeNote()">取消</button>
+            <button class="modal-btn" style="background: #1a73e8; color: white;" onclick="applyNote()">💾 儲存備註</button>
+        </div>
+    </div>
+</div>
+
+<!-- 數位簽名板 Modal -->
 <div id="signature-modal" class="modal-overlay">
     <div class="modal-content" style="max-width: 600px; width: 95%;">
         <div id="sig-title" class="modal-text" style="margin-bottom: 15px; font-weight: bold;">✍️ 簽名板</div>
@@ -286,7 +328,6 @@
 </div>
 
 <script>
-    // --- 自建中文字筆劃字典 (擴充版) ---
     var strokeMap = {
         '一':1, '二':2, '十':2, '丁':2, '七':2, '九':2, '八':2,
         '小':3, '大':3, '三':3, '千':3, '山':3, '川':3, '土':3, 
@@ -319,6 +360,8 @@
 
     function sortBirds(arr) {
         arr.sort(function(a, b) {
+            if (!a) return 1;
+            if (!b) return -1;
             var charA1 = a.charAt(0);
             var charB1 = b.charAt(0);
             var strokeA1 = getStroke(charA1);
@@ -341,13 +384,14 @@
     }
 
     var currentPhase = 'outbound';
+    // 在資料結構中加入 notes，用來存每種鳥的備註
     var data = {
         meta: { date: '', weather: '', outboundStart: '', outboundEnd: '', returnStart: '', returnEnd: '', leader: '', phone: '', email: '', members: '', leaderSignature: '', membersSignature: '' },
         birdSpecies: [],
-        records: { outbound: {}, return: {} }
+        records: { outbound: {}, return: {} },
+        notes: {} 
     };
 
-    // 替換為全新的 75 種鳥類預設名單
     var defaultCommonBirds = [
         '八哥', '小白鷺', '小水鴨', '小雨燕', '小環頸鴴', '小彎嘴', '大白鷺', '大卷尾', '大冠鷲', '山紅頭', 
         '中白鷺', '五色鳥', '白喉文鳥', '白尾八哥', '白腹秧雞', '白腹鶇', '白腰文鳥', '白腰草鷸', '白頭翁', '白鶺鴒', 
@@ -360,14 +404,13 @@
     ];
     
     var commonBirds = [];
-    var STORAGE_KEY = 'offlineBirdSurveyData_v8_ios9'; 
-    // 為了強迫舊 iPad 載入新的完整名單，這裡更新了 KEY 的版本號為 v3
-    var LIST_STORAGE_KEY = 'customBirdList_ios9_v3'; 
+    var STORAGE_KEY = 'offlineBirdSurveyData_v10_ios9'; // 更新版本確保升級
+    var LIST_STORAGE_KEY = 'customBirdList_ios9_v4'; 
     var editingBird = null;
 
     var currentSigType = '';
-    var canvas = document.getElementById('sig-canvas');
-    var ctx = canvas.getContext('2d');
+    var canvas = null;
+    var ctx = null;
     var isDrawing = false;
 
     function init() {
@@ -382,6 +425,7 @@
                 data.meta.members = data.meta.members || '';
                 data.meta.leaderSignature = data.meta.leaderSignature || '';
                 data.meta.membersSignature = data.meta.membersSignature || '';
+                if(!data.notes) data.notes = {}; // 確保舊版有備註欄位
             } catch (e) { }
         }
 
@@ -462,6 +506,10 @@
     }
 
     function openSignature(type) {
+        if(!canvas || !ctx) {
+            alert("系統尚未準備好簽名板，請重新載入網頁。");
+            return;
+        }
         currentSigType = type;
         document.getElementById('sig-title').innerText = type === 'leader' ? '✍️ 領隊專用簽名板' : '✍️ 隊員聯合簽名板';
         var modal = document.getElementById('signature-modal');
@@ -483,12 +531,14 @@
     }
 
     function clearSignature() {
+        if(!ctx) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     function saveSignature() {
+        if(!canvas) return;
         var dataUrl = canvas.toDataURL('image/png');
         if (currentSigType === 'leader') {
             data.meta.leaderSignature = dataUrl;
@@ -518,15 +568,17 @@
     }
 
     function startPosition(e) {
+        if(!ctx) return;
         isDrawing = true;
         draw(e);
     }
     function endPosition() {
+        if(!ctx) return;
         isDrawing = false;
         ctx.beginPath(); 
     }
     function draw(e) {
-        if (!isDrawing) return;
+        if (!isDrawing || !ctx) return;
         var rect = canvas.getBoundingClientRect();
         var scaleX = canvas.width / rect.width;   
         var scaleY = canvas.height / rect.height; 
@@ -539,23 +591,6 @@
         ctx.beginPath();
         ctx.moveTo(x, y);
     }
-
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', endPosition);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseout', endPosition);
-    canvas.addEventListener('touchstart', function(e) { 
-        if(e.target === canvas) { e.preventDefault(); }
-        startPosition(e); 
-    }, false);
-    canvas.addEventListener('touchend', function(e) { 
-        if(e.target === canvas) { e.preventDefault(); }
-        endPosition(); 
-    }, false);
-    canvas.addEventListener('touchmove', function(e) { 
-        if(e.target === canvas) { e.preventDefault(); }
-        draw(e); 
-    }, false);
 
     function setPhase(phase) {
         currentPhase = phase;
@@ -651,11 +686,42 @@
                 if (index > -1) data.birdSpecies.splice(index, 1); 
                 delete data.records.outbound[bird];
                 delete data.records.return[bird];
+                if (data.notes && data.notes[bird]) delete data.notes[bird]; // 同時刪除備註
             }
             saveData(); 
             renderBirdList();
             renderQuickButtons(); 
         }
+    }
+
+    // --- 備註功能邏輯 ---
+    function openNote(bird) {
+        editingBird = bird;
+        document.getElementById('note-title').innerText = '📝 ' + bird + ' 備註';
+        var inputElement = document.getElementById('note-input');
+        inputElement.value = data.notes[bird] || ''; 
+        var modal = document.getElementById('note-modal');
+        modal.style.display = '-webkit-flex';
+        modal.style.display = 'flex';
+        setTimeout(function() { inputElement.focus(); }, 100);
+    }
+
+    function closeNote() {
+        document.getElementById('note-modal').style.display = 'none';
+        editingBird = null;
+    }
+
+    function applyNote() {
+        if (!editingBird) return;
+        var noteText = document.getElementById('note-input').value.trim();
+        if (noteText) {
+            data.notes[editingBird] = noteText;
+        } else {
+            delete data.notes[editingBird];
+        }
+        saveData();
+        renderBirdList();
+        closeNote();
     }
 
     function renderBirdList() {
@@ -668,14 +734,21 @@
         for (var i = 0; i < data.birdSpecies.length; i++) {
             var bird = data.birdSpecies[i];
             var count = data.records[currentPhase][bird];
+            var note = data.notes[bird] ? '<span class="bird-note-display">📝 備註：' + data.notes[bird] + '</span>' : '';
             var div = document.createElement('div');
             div.className = 'bird-item';
             div.innerHTML = 
-                '<div class="bird-info"><span class="bird-name">' + bird + '</span></div>' +
-                '<div class="controls">' +
-                    '<button class="btn-circle btn-minus" onclick="changeCount(\'' + bird + '\', -1)">-</button>' +
-                    '<div class="count-display" onclick="openEditCount(\'' + bird + '\')">' + count + '</div>' +
-                    '<button class="btn-circle btn-plus" onclick="changeCount(\'' + bird + '\', 1)">+</button>' +
+                '<div class="bird-main-row">' +
+                    '<div class="bird-info">' +
+                        '<span class="bird-name">' + bird + '</span>' +
+                        note +
+                    '</div>' +
+                    '<div class="controls">' +
+                        '<button class="btn-circle btn-minus" onclick="changeCount(\'' + bird + '\', -1)">-</button>' +
+                        '<div class="count-display" onclick="openEditCount(\'' + bird + '\')">' + count + '</div>' +
+                        '<button class="btn-circle btn-plus" onclick="changeCount(\'' + bird + '\', 1)">+</button>' +
+                        '<button class="btn-circle btn-note" onclick="openNote(\'' + bird + '\')">📝</button>' +
+                    '</div>' +
                 '</div>';
             container.appendChild(div);
         }
@@ -717,6 +790,7 @@
             if (index > -1) data.birdSpecies.splice(index, 1); 
             delete data.records.outbound[editingBird];
             delete data.records.return[editingBird];
+            if (data.notes && data.notes[editingBird]) delete data.notes[editingBird];
         }
 
         saveData(); 
@@ -760,12 +834,12 @@
         
         var html = '<table style="width: 100%; border-collapse: collapse; margin-top: -1px; background: white;">' +
             '<thead><tr>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; width: 8%;">序號</th>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0;">鳥類名稱</th>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; width: 12%;">去程</th>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; width: 12%;">回程</th>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; width: 12%;">總計</th>' +
-            '<th style="border: 1px solid #aaa; padding: 8px; background: #f0f0f0; width: 22%;">備註</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee; width: 8%;">序號</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee;">鳥類名稱</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee; width: 12%;">去程</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee; width: 12%;">回程</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee; width: 12%;">總計</th>' +
+            '<th style="border: 1px solid #000; padding: 8px; background: #eee; width: 25%;">備註</th>' +
             '</tr></thead><tbody>';
         
         var totalOut = 0, totalRet = 0, grandTotal = 0, serialNumber = 1;
@@ -777,27 +851,28 @@
             var bird = sortedBirds[i];
             var outC = data.records.outbound[bird] || 0;
             var retC = data.records.return[bird] || 0;
+            var note = data.notes[bird] || ''; // 讀取備註
             var total = outC + retC;
             if (total > 0) {
                 totalOut += outC; totalRet += retC; grandTotal += total;
                 html += '<tr>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;">' + (serialNumber++) + '</td>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px;"><strong>' + bird + '</strong></td>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;">' + outC + '</td>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;">' + retC + '</td>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;" class="total-col">' + total + '</td>' +
-                    '<td style="border: 1px solid #aaa; padding: 8px;"></td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: center;">' + (serialNumber++) + '</td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: left;"><strong>' + bird + '</strong></td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: center;">' + outC + '</td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: center;">' + retC + '</td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: center;" class="total-col">' + total + '</td>' +
+                    '<td style="border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; color: #555;">' + note + '</td>' +
                     '</tr>';
             }
         }
         
         if (grandTotal > 0) {
-            html += '<tr style="background-color: #e8f0fe;">' +
-                '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;" colspan="2"><strong>總計</strong></td>' +
-                '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;"><strong>' + totalOut + '</strong></td>' +
-                '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;"><strong>' + totalRet + '</strong></td>' +
-                '<td style="border: 1px solid #aaa; padding: 8px; text-align: center;" class="total-col"><strong>' + grandTotal + '</strong></td>' +
-                '<td style="border: 1px solid #aaa; padding: 8px;"></td>' +
+            html += '<tr style="background-color: #f8f9fa;">' +
+                '<td style="border: 1px solid #000; padding: 8px; text-align: center;" colspan="2"><strong>總計</strong></td>' +
+                '<td style="border: 1px solid #000; padding: 8px; text-align: center;"><strong>' + totalOut + '</strong></td>' +
+                '<td style="border: 1px solid #000; padding: 8px; text-align: center;"><strong>' + totalRet + '</strong></td>' +
+                '<td style="border: 1px solid #000; padding: 8px; text-align: center;" class="total-col"><strong>' + grandTotal + '</strong></td>' +
+                '<td style="border: 1px solid #000; padding: 8px;"></td>' +
                 '</tr>';
         }
         html += '</tbody></table>';
@@ -810,6 +885,11 @@
         document.body.style.backgroundColor = ""; 
         setPhase(currentPhase);
         window.scrollTo(0, 0);
+    }
+
+    // 呼叫系統列印功能 (iPad 存 PDF 密技)
+    function printTable() {
+        window.print();
     }
 
     function showSettings() {
@@ -855,31 +935,11 @@
         });
     }
 
-    function copyTable() {
-        var containerToCopy = document.getElementById('export-container');
-        var range, sel;
-        if (document.createRange && window.getSelection) {
-            range = document.createRange(); 
-            sel = window.getSelection(); 
-            sel.removeAllRanges();
-            try { 
-                range.selectNodeContents(containerToCopy); 
-                sel.addRange(range); 
-            } catch (e) { 
-                range.selectNode(containerToCopy); 
-                sel.addRange(range); 
-            }
-            document.execCommand('copy'); 
-            sel.removeAllRanges(); 
-            showModal('資料已複製！開啟 Excel 貼上即可。', false);
-        }
-    }
-
     function confirmReset() {
-        showModal('確定要開啟新調查嗎？\n這將清空所有數量與簽名。', true, function() {
+        showModal('確定要開啟新調查嗎？\n這將清空所有數量、備註與簽名。', true, function() {
             data = { 
                 meta: { date: '', weather: '', outboundStart: '', outboundEnd: '', returnStart: '', returnEnd: '', leader: '', phone: '', email: '', members: '', leaderSignature: '', membersSignature: '' }, 
-                birdSpecies: [], records: { outbound: {}, return: {} } 
+                birdSpecies: [], records: { outbound: {}, return: {} }, notes: {} 
             };
             localStorage.removeItem(STORAGE_KEY);
             init(); 
@@ -909,9 +969,36 @@
         }
     }
 
-    init();
+    window.onload = function() {
+        try {
+            canvas = document.getElementById('sig-canvas');
+            if(canvas) {
+                ctx = canvas.getContext('2d');
+                canvas.addEventListener('mousedown', startPosition);
+                canvas.addEventListener('mouseup', endPosition);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseout', endPosition);
+                canvas.addEventListener('touchstart', function(e) { 
+                    if(e.target === canvas) { e.preventDefault(); }
+                    startPosition(e); 
+                }, false);
+                canvas.addEventListener('touchend', function(e) { 
+                    if(e.target === canvas) { e.preventDefault(); }
+                    endPosition(); 
+                }, false);
+                canvas.addEventListener('touchmove', function(e) { 
+                    if(e.target === canvas) { e.preventDefault(); }
+                    draw(e); 
+                }, false);
+            }
+            init();
+        } catch(err) {
+            alert("啟動程序失敗：\n" + err.message);
+        }
+    };
 </script>
 
 </body>
 </html>
+
 
